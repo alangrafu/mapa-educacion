@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html>
+ <head>
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Camino a la Educación</title>
+  <style>
+   body{
+   	font-family:sans-serif;
+   	font-size:12px;
+   	padding: 0px;
+   	margin: 0px;
+   	}
+   	.map{
+   		width: 800px;
+   		height: 500px;
+   	}
+  </style>
+  </head>
+ <body>  
+  <div id="viz1" style='float:left;width:80%'>
+    <div id="map1" class="map"></div>
+    <span id='simceText'></span>
+  </div>
+  <div id="viz2" style='float:left;width:20%' >
+  <h3>¿Qué escuelas tienen un puntaje SIMCE  >= X? ¿Dónde están ubicadas esas escuelas?</h3>
+  </div>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+  <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBesLzHwPJ7iyIHxF-RNiXH1vtUUHCqi78&sensor=true"></script>
+ 
+  <script>
+  var mapOptions = {
+    zoom: 11,
+    center: new google.maps.LatLng(-33.5, -70.7),
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  }
+  var marker = [];
+  var map = new google.maps.Map(document.getElementById('map1'),
+                                mapOptions);
+
+
+  function init1(){
+  	var max = 0, min = 200;
+  	d3.csv("datos.csv", function(error, csv) {
+      console.log(csv);
+      csv.forEach(function(x) {
+      	if(max < parseInt(x.simce)){
+      		max = parseInt(x.simce);
+      	}
+      	if(min > parseInt(x.simce)){
+      		min = parseInt(x.simce);
+      	}
+        var myLatLng = new google.maps.LatLng(parseFloat(x.lat), parseFloat(x.lon));
+        marker.push( new google.maps.Marker({
+          position: myLatLng,
+          map: map,
+          title: x.escuela,
+          simce: parseInt(x.simce)
+        })
+        );
+
+var infowindow = new google.maps.InfoWindow({
+      content: x.escuela
+  });
+google.maps.event.addListener(marker[marker.length-1], 'click', function() {
+    infowindow.open(map,marker[marker.length-1]);
+  });
+min=200;
+
+      });
+      d3.select("#viz1").append("input").attr("type", "range").attr("max", max).attr("min", min).attr("step", "1").attr("value", min).attr("id", "simceScore").attr("onchange", "changeSimceScore();");
+      d3.select("#viz1").append("span").html("Puntaje mínimo SIMCE");
+      changeSimceScore();
+
+    });
+  }
+
+  function changeSimceScore(){
+  	var v =d3.select("#simceScore").property("value");
+  	d3.select("#simceText").html(v);
+  	for (i in marker){
+  		if(marker[i].simce < v){
+  			marker[i].setMap(null);
+  		}else{
+  			marker[i].setMap(map);  			
+  		}
+  	}
+  }
+  
+  init1();
+
+  </script>
+ </body>
+</html>
