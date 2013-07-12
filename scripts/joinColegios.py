@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# python joinColegios.py ../data/Establecimiento_Matricula_anio_2013.csv ../data/fichasColegios.csv  ../data/finales_coordenadas.txt > ../www/datos.csv
+# python joinColegios.py ../datos/Establecimiento_Matricula_anio_2013.csv ../datos/fichasColegios.csv  ../datos/finales_coordenadas.txt > ../www/datos.csv
 
 import sys,os
 import difflib
