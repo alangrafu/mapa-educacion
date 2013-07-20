@@ -2,6 +2,10 @@
 
 # python joinColegios.py ../datos/Establecimiento_Matricula_anio_2013.csv ../datos/fichasColegios.csv  ../datos/finales_coordenadas.txt > ../www/datos.csv
 
+# by Nicolas Loira
+# nloira@gmail.com
+# June 2013
+
 import sys,os
 import difflib
 
