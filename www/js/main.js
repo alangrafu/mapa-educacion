@@ -36,7 +36,7 @@ map.setCenter(center);
         );
 
 google.maps.event.addListener(marker[marker.length-1], 'click', function() {
-  infowindow.content = "ASD";//this.title
+  infowindow.content = this.title
   infowindow.open(map,this);
 });
 min=200;
