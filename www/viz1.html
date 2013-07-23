@@ -23,18 +23,7 @@
       color: #5a5a5a;
       padding-top: 80px;
     }
-input[type="range"]{
-    background: rgb(94, 30, 30);
-    width: 800px;
-    height: 6px;
-    -webkit-appearance: none;
-    border-radius: 8px;
-    -moz-border-radius: 8px;
-    -wekkit-border-radius: 8px;
-    -webkit-box-shadow: inset 0px 0px 1px 1px rgba(0, 0, 0, 0.9), 0px 1px 1px 0px rgba(255, 255, 255, 0.13);
-    -moz-box-shadow: inset 0px 0px 1px 1px rgba(0, 0, 0, 0.9), 0px 1px 1px 0px rgba(255, 255, 255, 0.13);
-    box-shadow: inset 0px 0px 1px 1px rgba(0, 0, 0, 0.9), 0px 1px 1px 0px rgba(255, 255, 255, 0.13);
-}
+
 #simceText{
   font-size: 120%;
   color: crimson;
@@ -334,72 +323,10 @@ input[type="range"]{
        <h3>¿Qué escuelas tienen un puntaje SIMCE de al menos <span id='simceText'></span> puntos?</h3>
        <div id="viz1" style='float:left;width:80%'>
         </div>
-        <script src="http://d3js.org/d3.v3.min.js"></script>
+        <script src="js/d3.v3.min.js"></script>
+        <script src="js/html5slider.js"></script>
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBesLzHwPJ7iyIHxF-RNiXH1vtUUHCqi78&sensor=true"></script>
-        <script>
-  var mapOptions = {
-    zoom: 11,
-    center: new google.maps.LatLng(-33.5, -70.7),
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-  }
-  var marker = [];
-  var map = new google.maps.Map(document.getElementById('map1'),
-                                mapOptions);
-
-google.maps.event.addDomListener(window, "resize", function() {
-var center = map.getCenter();
-google.maps.event.trigger(map, "resize");
-map.setCenter(center); 
-});
-  function init1(){
-  	var max = 0, min = 200;
-  	d3.csv("datos.csv", function(error, csv) {
-      csv.forEach(function(x) {
-      	if(max < parseInt(x.simce)){
-      		max = parseInt(x.simce);
-      	}
-      	if(min > parseInt(x.simce)){
-      		min = parseInt(x.simce);
-      	}
-        var myLatLng = new google.maps.LatLng(parseFloat(x.lat), parseFloat(x.lon));
-        marker.push( new google.maps.Marker({
-          position: myLatLng,
-          map: map,
-          title: x.escuela,
-          simce: parseInt(x.simce)
-        })
-        );
-
-var infowindow = new google.maps.InfoWindow({
-      content: x.escuela
-  });
-google.maps.event.addListener(marker[marker.length-1], 'click', function() {
-    infowindow.open(map,marker[marker.length-1]);
-  });
-min=200;
-
-      });
-      d3.select("#viz1").append("input").attr("type", "range").attr("max", max).attr("min", min).attr("step", "1").attr("value", min).attr("id", "simceScore").attr("onchange", "changeSimceScore();");
-      changeSimceScore();
-
-    });
-  }
-
-  function changeSimceScore(){
-  	var v =d3.select("#simceScore").property("value");
-  	d3.select("#simceText").html(v);
-  	for (i in marker){
-  		if(marker[i].simce < v){
-  			marker[i].setMap(null);
-  		}else{
-  			marker[i].setMap(map);  			
-  		}
-  	}
-  }
-  
-  init1();
-
-  </script>
+        <script src="js/main.js"></script>
 </div>
 </div>
 </div>
