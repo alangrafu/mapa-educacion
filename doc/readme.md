@@ -6,7 +6,7 @@ $ git clone https://github.com/alangrafu/mapa-educacion
 
 #How to use this
 
-Initially, mapa-educacion was developed during the [Inria Chile / Open News scrapaton](http://www.meetup.com/HacksHackersChile/events/121553142/). Thus, it was left as a hack, without nice documentation like this document.
+Initially, mapa-educacion was developed during the [Inria Chile / Open News scrapaton](http://www.meetup.com/HacksHackersChile/events/121553142/). Thus, it was left as a hack, without nice documentation like this.
 
 There are two main visualizations, the first one is most likely to be reused, the second one seems too custom.
 
