@@ -3,11 +3,11 @@ function init(options){
   "url": "datos.csv",
   "mapCenter": [-33.5, -70.7],
   "mapZoom": 11,
-  "scoreField": "simce",
   "latField": "lat",
   "lonField": "lon",
   "titleField": "escuela",
-  "scoreField": "simce"
+  "scoreField": "simce",
+  "mapDiv": 'map1'
 };
 for(var i in options){
   config[i] = options[i];
@@ -19,7 +19,7 @@ var mapOptions = {
   mapTypeId: google.maps.MapTypeId.ROADMAP
 }
 var marker = [];
-var map = new google.maps.Map(document.getElementById('map1'),
+var map = new google.maps.Map(document.getElementById(self.config.mapDiv),
   mapOptions);
 
 google.maps.event.addDomListener(window, "resize", function() {
