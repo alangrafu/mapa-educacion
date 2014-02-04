@@ -1,24 +1,24 @@
-function init1(options){
+function init(options){
  config = {
-            "url": "datos.csv",
-            "mapCenter": [-33.5, -70.7],
-            "mapZoom": 11,
-            "scoreField": "simce",
-            "latField": "lat",
-            "lonField": "lon",
-            "titleField": "escuela"
- };
- for(var i in options){
+  "url": "datos.csv",
+  "mapCenter": [-33.5, -70.7],
+  "mapZoom": 11,
+  "scoreField": "simce",
+  "latField": "lat",
+  "lonField": "lon",
+  "titleField": "escuela",
+  "scoreField": "simce"
+};
+for(var i in options){
   config[i] = options[i];
- }
+}
 
- var mapOptions = {
+var mapOptions = {
   zoom: config.mapZoom,
   center: new google.maps.LatLng(config.mapCenter[0], config.mapCenter[1]),
   mapTypeId: google.maps.MapTypeId.ROADMAP
 }
-var marker = [],
-    scoreField = "simce";
+var marker = [];
 var map = new google.maps.Map(document.getElementById('map1'),
   mapOptions);
 
@@ -28,12 +28,12 @@ google.maps.event.addDomListener(window, "resize", function() {
   map.setCenter(center); 
 });
 
- var max = 0, min = 200;
- var infowindow = new google.maps.InfoWindow({
+var max = 0, min = 200;
+var infowindow = new google.maps.InfoWindow({
   content: ""
 });
 
- d3.csv(config.url, function(error, csv) {
+d3.csv(config.url, function(error, csv) {
   csv.forEach(function(x) {
    if(max < parseInt(x[config.scoreField])){
     max = parseInt(x[config.scoreField]);
@@ -57,24 +57,24 @@ google.maps.event.addDomListener(window, "resize", function() {
   min=200;
 
 });
-  d3.select("#viz1").append("input").attr("type", "range").attr("max", max).attr("min", min).attr("step", "1").attr("value", min).attr("id", "simceScore").attr("onchange", "changeSimceScore();");
-  changeSimceScore();
+  d3.select("#viz1").append("input").attr("type", "range").attr("max", max).attr("min", min).attr("step", "1").attr("value", min).attr("id", "thresholdScore").on("change", function(){changeThresholdScore();});
+  changeThresholdScore();
 
 
-function changeSimceScore(){
- var v =d3.select("#simceScore").property("value");
- d3.select("#simceText").html(v);
- for (i in marker){
-  if(marker[i][scoreField] < v){
-   marker[i].setMap(null);
- }else{
-   marker[i].setMap(map);       
+  function changeThresholdScore(){
+   var v =d3.select("#thresholdScore").property("value");
+   d3.select("#simceText").html(v);
+   for (i in marker){
+    if(marker[i][config.scoreField] < v){
+     marker[i].setMap(null);
+   }else{
+     marker[i].setMap(map);       
+   }
  }
-}
 }
 
 
 });
 }
 
-init1();
+init();

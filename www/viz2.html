@@ -332,7 +332,7 @@ input[type="range"]{
     <div class="form-inline">
      <label for="puntaje">Puntaje</label> <input type="number" id="puntaje" name="puntaje" min="200" max="350" value="200"/><br/>
      <label for="comuna">Comuna</label> <select id="comuna" name="comuna"></select><br/>
-     <button onclick="run();">Calcular!</button>
+     <button id="run">Calcular!</button>
      <hr/>
     </div>
     <div id="resultado"></div>
@@ -342,120 +342,9 @@ input[type="range"]{
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
   <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBesLzHwPJ7iyIHxF-RNiXH1vtUUHCqi78&sensor=true"></script>
  
-  <script>
-  var mapOptions = {
-    zoom: 11,
-    center: new google.maps.LatLng(-33.5, -70.7),
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-  }
-  var escuelas = [], comunas = [], lines = [];
-  var map = new google.maps.Map(document.getElementById('map1'),
-                                mapOptions);
+  <script src="js/main2.js"></script>
 
 
-  function init(){
-  	var max = 0, min = 1000;
-  	d3.csv("datos.csv", function(error, csv) {
-      escuelas = csv;
-      d3.csv("comunas.csv", function(error2, csv2){
-        comunas = csv2;
-        csv2.forEach(function(x) {
-          d3.select("#comuna").append("option").attr("value", x.lat+","+x.lon).html(x.comuna);
-        });
-      });
-    });
-  }
-
-
-  function run(){
-    var latlon = $("#comuna option:selected").val().split(",");
-    var p ={
-      simce: d3.select("#puntaje").property("value"),
-      lat: latlon[0],
-      lon: latlon[1],
-      name: $("#comuna option:selected").html()
-    };
-      selection  = getClosestSchool(p);
-      if(selection !=null){
-      var e = selection[0];
-      d3.select("#resultado").html(e.escuela+"<br/>Distancia: "+parseInt(e.distance)+" KM.<br/>Simce: "+e.simce+"puntos<br/> Costo: "+e.costo+"<br/> Tipo: "+e.tipo+"<hr/>");
-    }else{
-      d3.select("#resultado").html("No se encontraron escuelas con ese criterio");
-    }
-  }
-
-  function getClosestSchool(point){
-    var selection = [];
-    for(var i=0; i< lines.length; i++){
-      lines[i].setMap(null);
-    }
-    //First, filter schools by simce
-    for(i in escuelas){
-      if(parseInt(escuelas[i].simce) >= parseInt(point.simce)){
-        var x = escuelas[i];
-        x.distance = distancia(escuelas[i], point);
-        selection.push(x);
-      }
-    }
-    //Then, find the closes one
-    selection.sort(function(a,b) { return a.distance - b.distance } );
-
-
-    if(selection.length>0){
-      closest = selection[0];
-      var schoolCoordinates = [
-      new google.maps.LatLng(point.lat, point.lon),
-      new google.maps.LatLng(closest.lat, closest.lon)
-      ];
-
-      i=lines.length;
-      lines[i] = new google.maps.Polyline({
-        path: schoolCoordinates,
-        strokeColor: '#FF0000',
-        strokeOpacity: 1.0,
-        strokeWeight: 2
-      });
-      lines[i++].setMap(map);
-      lines[i++] =  new google.maps.Marker({
-          position: new google.maps.LatLng(point.lat, point.lon),
-          map: map
-        });
-      lines[i++] =  new google.maps.Marker({
-          position: new google.maps.LatLng(closest.lat, closest.lon),
-          map: map
-        });
-      return selection;
-    }else{
-      return null;
-    }
-  }
-
- if (typeof(Number.prototype.toRad) === "undefined") {
-   Number.prototype.toRad = function() {
-     return this * Math.PI / 180;
-   }
- }  
-init();
-
- function distancia(point1, point2){
-  var lat1 = parseFloat(point1.lat), lat2 = parseFloat(point2.lat), lon1 = parseFloat(point1.lon), lon2 = parseFloat(point2.lon);
-  var R = 6371; // km
-  var dLat = (lat2-lat1).toRad();
-  var dLon = (lon2-lon1).toRad();
-  lat1 = lat1.toRad();
-  lat2 = lat2.toRad();
-  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-  var d = R * c;
-  return d;
- }
-  p1 = {"lat": -33, "lon": -70};
-  p2 = {"lat": 0, "lon": 0};
-
-
-  </script>
-  
 </div>
 </div>
 <script>
@@ -479,7 +368,7 @@ init();
       'numPreferredServices' : 6
     }   
   });
-</script>
+
 <!-- AddThis Smart Layers END -->
 </body>
 </html>
